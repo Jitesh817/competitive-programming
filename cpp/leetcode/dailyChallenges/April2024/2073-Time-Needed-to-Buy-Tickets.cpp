@@ -37,6 +37,24 @@ public:
 
         return timeTaken;
     }
+
+    //approach 2
+    int timeRequiredToBuyII(vector<int>& tickets, int k) {
+        
+        int ticketsRequired = tickets[k];
+        int totalTime = ticketsRequired;
+
+        for(int i = 0; i < k; i++) {
+            totalTime += ticketsRequired < tickets[i] ? ticketsRequired : tickets[i];
+        }
+        
+        ticketsRequired--;
+        for(int i = k+1; i < tickets.size(); i++) {
+            totalTime += ticketsRequired < tickets[i] ? ticketsRequired : tickets[i];
+        }
+
+        return totalTime;
+    }
 };
 
 int main() {
