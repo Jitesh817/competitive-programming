@@ -47,3 +47,7 @@ public:
         return lowestTurns(loc, key, 0, 0, dp);
     }
 };
+
+int main() {
+    return 0;
+}
