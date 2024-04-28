@@ -11,31 +11,61 @@ using namespace std;
 class Solution {
 public:
     int minFallingPathSum(vector<vector<int>>& grid) {
-        int n = grid.size(), res = INT_MAX;
-        vector<vector<int>> dp(n, vector<int>(n, -1));
+        
+        int n = grid.size();
+        for(int i = 1; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                
+                int min = INT_MAX;
+                for(int k = 0; k < n; k++) {
+                    if(k == j) {
+                        continue;
+                    }
+                    min = min < grid[i-1][k] ? min : grid[i-1][k];
+                }
 
-        for(int j = 0; j < n; ++j) {
-            dp[0][j] = grid[0][j];
+                grid[i][j] += min;
+            }
         }
 
-        for(int i = 1; i < n; ++i) {
-            for(int j = 0; j < n; ++j) {
-                int temp = INT_MAX;
+        return *min_element(grid.back().begin(), grid.back().end());
+    }
+};
 
-                for(int k = 0; k < n; ++k) {
-                    if(k != j) {
-                        temp = min(temp, grid[i][j] + dp[i - 1][k]);
-                    }
+class SolutionOptimized {
+public:
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        
+        int n = grid.size();
+        for(int i = 1; i < n; i++) {
 
-                    dp[i][j] = temp;
+            int min1 = INT_MAX, ind1 = -1, min2 = INT_MAX, ind2 = -1;
+
+            for(int j = 0; j < n; j++) {
+                if(grid[i-1][j] < min1) {
+                    min2 = min1;
+                    ind2 = ind1;
+                    min1 = grid[i-1][j];
+                    ind1 = j;
+                } else if(grid[i-1][j] < min2) {
+                    min2 = grid[i-1][j];
+                    ind2 = j;
+                }
+            }
+
+            for(int j = 0; j < n; j++) {
+                if(j == ind1) {
+                    grid[i][j] += min2;
+                } else {
+                    grid[i][j] += min1;
                 }
             }
         }
 
-        for(int j = 0; j < n; ++j) {
-            res = min(res, dp[n - 1][j]);
-        }
-
-        return res;
+        return *min_element(grid.back().begin(), grid.back().end());
     }
 };
+
+int main() {
+    return 0;
+}
